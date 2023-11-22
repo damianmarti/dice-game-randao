@@ -3,6 +3,7 @@ import * as chains from "viem/chains";
 export type ScaffoldConfig = {
   targetNetwork: chains.Chain;
   pollingInterval: number;
+  fromBlock: bigint;
   alchemyApiKey: string;
   walletConnectProjectId: string;
   onlyLocalBurnerWallet: boolean;
@@ -11,11 +12,13 @@ export type ScaffoldConfig = {
 
 const scaffoldConfig = {
   // The network where your DApp lives in
-  targetNetwork: chains.hardhat,
+  targetNetwork: chains.sepolia,
 
   // The interval at which your front-end polls the RPC servers for new data
   // it has no effect on the local network
   pollingInterval: 30000,
+
+  fromBlock: 4746393n,
 
   // This is ours Alchemy's default API key.
   // You can get your own at https://dashboard.alchemyapi.io
