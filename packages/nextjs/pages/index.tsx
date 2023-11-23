@@ -108,7 +108,7 @@ const Home: NextPage = () => {
     if (blockNumber && targetBlockNumber) {
       const show = blockNumber < targetBlockNumber;
       setShowRollNotice(show);
-      const missed = blockNumber > targetBlockNumber + 256n;
+      const missed = blockNumber > targetBlockNumber + 256n && betData !== undefined && !betData[2];
       setMissedWindow(missed);
       const disabled = show || missed || (betData !== undefined && betData[2]);
       setRollDisabled(disabled);
@@ -236,6 +236,7 @@ const Home: NextPage = () => {
                 {showRollNotice && targetBlockNumber && blockNumber && (
                   <p>Wait for {(targetBlockNumber - blockNumber).toString()} blocks to roll the dice</p>
                 )}
+                {missedWindow && <p className="text-l font-bold">You missed the window to roll the dice</p>}
                 <button className="btn btn-primary" disabled={rollDisabled} onClick={rollTheDice}>
                   Roll the dice
                 </button>
