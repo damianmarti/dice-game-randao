@@ -5,7 +5,7 @@ import { getParsedError } from "~~/components/scaffold-eth";
 import { getBlockExplorerTxLink, notification } from "~~/utils/scaffold-eth";
 
 type TransactionFunc = (
-  tx: (() => Promise<WriteContractResult>) | SendTransactionParameters,
+  tx: (() => Promise<WriteContractResult>) | (() => Promise<`0x${string}`>) | SendTransactionParameters,
   options?: {
     onBlockConfirmation?: (txnReceipt: TransactionReceipt) => void;
     blockConfirmations?: number;

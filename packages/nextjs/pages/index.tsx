@@ -177,10 +177,10 @@ const Home: NextPage = () => {
     setRolling(true);
     setRollDisabled(true);
 
-    const makeWriteWithParams = () => diceGameContract?.write.rollTheDice([rlpEncodedValues]);
-    if (makeWriteWithParams !== undefined) {
-      // @ts-ignore TODO: fix this
-      await writeTx(makeWriteWithParams, {
+    if (diceGameContract !== undefined) {
+      const makeWrite = () => diceGameContract.write.rollTheDice([rlpEncodedValues]);
+
+      await writeTx(makeWrite, {
         onBlockConfirmation: txnReceipt => {
           console.log("Transaction blockHash", txnReceipt.blockHash);
           setRolled(true);
