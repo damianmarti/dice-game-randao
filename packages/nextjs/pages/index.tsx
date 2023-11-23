@@ -250,30 +250,30 @@ const Home: NextPage = () => {
               <p className="text-2xl font-bold">Bets</p>
               {betEvents &&
                 betEvents.map((event, index) => (
-                  <p key={index} className="mt-0">
+                  <div key={index} className="mt-0">
                     <Address address={event.args.player} />
                     Bet: {event.args.number}
-                  </p>
+                  </div>
                 ))}
             </div>
             <div className="flex flex-col bg-base-100 px-10 text-center items-center max-w-xs rounded-3xl">
               <p className="text-2xl font-bold">Rolls</p>
               {rollEvents &&
                 rollEvents.map((event, index) => (
-                  <p key={index} className="mt-0">
+                  <div key={index} className="mt-0">
                     <Address address={event.args.player} />
                     Number: {event.args.number}
-                  </p>
+                  </div>
                 ))}
             </div>
             <div className="flex flex-col bg-base-100 px-10 text-center items-center max-w-xs rounded-3xl">
               <p className="text-2xl font-bold">Winners</p>
               {winnerEvents &&
                 winnerEvents.map((event, index) => (
-                  <p key={index} className="mt-0">
+                  <div key={index} className="mt-0">
                     <Address address={event.args.winner} />
                     Number: {event.args.number}
-                  </p>
+                  </div>
                 ))}
             </div>
           </div>

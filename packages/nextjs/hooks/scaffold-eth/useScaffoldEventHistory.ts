@@ -104,7 +104,7 @@ export const useScaffoldEventHistory = <
           });
         }
         if (events && typeof fromBlock === "undefined") {
-          setEvents([...events, ...newEvents]);
+          setEvents([...newEvents, ...events]);
         } else {
           setEvents(newEvents);
         }
