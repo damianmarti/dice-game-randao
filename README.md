@@ -1,4 +1,80 @@
-# 🏗 Scaffold-ETH 2
+# 🚩 🎲 Dice Game using RANDAO as a randomness source
+
+Migrated and updated from SE-1 https://github.com/scaffold-eth/scaffold-eth/blob/dice-game-using-future-difficulty-using-block-header
+
+## How it works
+
+Ethereum PoS introduces randomness using block.difficulty. Look at https://eips.ethereum.org/EIPS/eip-4399 for more information.
+
+In this dice game the user can bet on a number between 0 and 15 and then some blocks after the bet, he can roll the dice to check if he won.
+
+When the user bets, the current block number is saved on the contract along with the bet number. Then a future block number is used to determine what number is gotten from the dice. To do that, the ```rollTheDice``` method receives the RLP encoded block header (this is the block header for the future block where the dice number gets). For example, if the bet is on block number 100 and the ```futureBlocks``` on the contract is set to 10, then the ```rollTheDice``` method needs to receive the header for block 110.
+
+The contract checks that it's the right block number and the block hash is ok (comparing blockhash(number) and the hash calculated from the block header sent to the method). If it's ok, the contract uses the field ```mixHash``` from the header as a randomness source as described at https://eips.ethereum.org/EIPS/eip-4399
+
+The frontend has to get the block data, set it in the right order and RLP encode it before sending the data to the ```rollTheDice``` method:
+
+```
+    const blockData = await publicClient.getBlock({ blockNumber: targetBlockNumber });
+
+    console.log("blockData: ", blockData);
+
+    const values: `0x${string}`[] = [];
+    values.push(blockData.parentHash);
+    values.push(blockData.sha3Uncles);
+    values.push(blockData.miner as `0x${string}`);
+    values.push(blockData.stateRoot);
+    values.push(blockData.transactionsRoot);
+    values.push(blockData.receiptsRoot);
+    values.push(blockData.logsBloom);
+    values.push(`0x${blockData.difficulty.toString(16)}`);
+    values.push(`0x${blockData.number.toString(16)}`);
+    values.push(`0x${blockData.gasLimit.toString(16)}`);
+    values.push(`0x${blockData.gasUsed.toString(16)}`);
+    values.push(`0x${blockData.timestamp.toString(16)}`);
+    values.push(blockData.extraData);
+    values.push(blockData.mixHash);
+    values.push(blockData.nonce);
+    if ("baseFeePerGas" in blockData && blockData.baseFeePerGas !== null) {
+      values.push(`0x${blockData.baseFeePerGas.toString(16)}`);
+    }
+    if ("withdrawalsRoot" in blockData && blockData.withdrawalsRoot !== undefined) {
+      values.push(blockData.withdrawalsRoot);
+    }
+
+    console.log("blockData values: ", values);
+    for (let i = 0; i < values.length; i++) {
+      if (values[i] === "0x0") {
+        values[i] = "0x";
+      }
+      if (values[i].length % 2 === 1) {
+        values[i] = ("0x0" + values[i].substring(2)) as `0x${string}`;
+      }
+    }
+    console.log("blockData values after: ", values);
+
+    const rlpEncodedValues = toRlp(values);
+    console.log("blockData RLP: ", rlpEncodedValues);
+
+    const blockHash = keccak256(rlpEncodedValues);
+    console.log("blockData hash: ", blockHash);
+
+    if (blockHash !== blockData.hash) {
+      notification.error("Block hash mismatch");
+      return;
+    }
+```
+
+You can find this code on this file https://github.com/damianmarti/dice-game-randao/blob/main/packages/nextjs/pages/index.tsx#L128
+
+The block hash is calculated, and you can check if it's right by checking the actual block hash.
+
+## Deployment
+
+The contract is deployed to the Sepolia testnet and the frontend is deployed at https://dice-game-randao.vercel.app
+
+
+## 🏗 Scaffold-ETH 2
 
 <h4 align="center">
   <a href="https://docs.scaffoldeth.io">Documentation</a> |
