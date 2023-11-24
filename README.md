@@ -1,6 +1,6 @@
 # 🚩 🎲 Dice Game using RANDAO as a randomness source
 
-Migrated and updated from SE-1 https://github.com/scaffold-eth/scaffold-eth/blob/dice-game-using-future-difficulty-using-block-header
+Migrated and updated from *SE-1* and with new *withdrawalsRoot* header added after the Ethereum Shanghai hard fork upgrade https://github.com/scaffold-eth/scaffold-eth/blob/dice-game-using-future-difficulty-using-block-header
 
 ## How it works
 
