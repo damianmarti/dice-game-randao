@@ -151,6 +151,15 @@ const Home: NextPage = () => {
     if ("withdrawalsRoot" in blockData && blockData.withdrawalsRoot !== undefined) {
       values.push(blockData.withdrawalsRoot);
     }
+    if ("blobGasUsed" in blockData && blockData.blobGasUsed !== undefined) {
+      values.push(blockData.blobGasUsed);
+    }
+    if ("excessBlobGas" in blockData && blockData.excessBlobGas !== undefined) {
+      values.push(blockData.excessBlobGas);
+    }
+    if ("parentBeaconBlockRoot" in blockData && blockData.parentBeaconBlockRoot !== undefined) {
+      values.push(blockData.parentBeaconBlockRoot);
+    }
 
     console.log("blockData values: ", values);
     for (let i = 0; i < values.length; i++) {
